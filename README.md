@@ -201,7 +201,7 @@ Neste caso, ajuste `EVOLUTION_API_URL` no `.env` para apontar para a URL acessê
 
 ```bash
 # 1. Clonar e configurar
-git clone git@github.com:inematds/intelecto-testes.git
+git clone git@github.com:linnoff88-dev/intelecto-testes.git
 cd intelecto-testes
 cp .env.example .env
 # Edite o .env com suas chaves
