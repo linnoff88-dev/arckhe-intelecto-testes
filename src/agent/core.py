@@ -11,14 +11,14 @@ _provider = OpenRouterProvider()
 # Histórico em memória por conversa (será substituído pelo SQLite na Fase 2)
 _sessions: dict[str, list[dict]] = {}
 
-MAX_HISTORY = 20  # Máximo de mensagens no histórico por sessão
+MAX_HISTORY = 20  # Máximo de mensagens no histórico por sessêo
 
 
 async def handle_message(remote_jid: str, text: str) -> str:
     """Processa uma mensagem do usuário e retorna a resposta da IA."""
     soul = load_soul(settings.soul_path)
 
-    # Recupera ou cria histórico da sessão
+    # Recupera ou cria histórico da sessêo
     history = _sessions.setdefault(remote_jid, [])
     history.append({"role": "user", "content": text})
 

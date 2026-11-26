@@ -1,10 +1,10 @@
-# Intelecto AI Framework — Relatório de Plano e Execução
+# Intelecto AI Framework — Relatório de Plano e Execuçêo
 
 **Data:** 2026-03-25
 
 ---
 
-## 1. Visão Geral
+## 1. Visêo Geral
 
 Framework de agente IA customizado chamado "Intelecto", rodando inteiramente em Docker. Recebe mensagens via WhatsApp, processa com LLM (OpenRouter), e responde com personalidade configurável.
 
@@ -12,7 +12,7 @@ Framework de agente IA customizado chamado "Intelecto", rodando inteiramente em 
 
 ## 2. Decisões Técnicas
 
-| Decisão | Escolha | Justificativa |
+| Decisêo | Escolha | Justificativa |
 |---------|---------|---------------|
 | Linguagem | Python 3.12 | Simplicidade, ecossistema IA maduro |
 | Web framework | FastAPI | Async nativo, alta performance |
@@ -21,7 +21,7 @@ Framework de agente IA customizado chamado "Intelecto", rodando inteiramente em 
 | DB memória | SQLite | Leve, sem container extra |
 | DB vetorial | ChromaDB | Busca semântica, container dedicado |
 | Scheduler | APScheduler | Integra com Python/SQLite nativamente |
-| Orquestração | Docker Compose | Multi-container simples |
+| Orquestraçêo | Docker Compose | Multi-container simples |
 
 ---
 
@@ -68,7 +68,7 @@ intelecto-testes/
 │   │   ├── store.py               # Two-layer memory (Fase 2)
 │   │   └── solutions.py           # Solution memory (Fase 2)
 │   ├── knowledge/
-│   │   ├── indexer.py             # Indexação de docs (Fase 4)
+│   │   ├── indexer.py             # Indexaçêo de docs (Fase 4)
 │   │   └── search.py              # Busca semântica (Fase 4)
 │   └── scheduler/
 │       ├── cron.py                # Cron jobs (Fase 3)
@@ -81,7 +81,7 @@ intelecto-testes/
 
 ---
 
-## 5. Fases de Implementação
+## 5. Fases de Implementaçêo
 
 ### Fase 1 — Core Funcional (MVP) ✅ CONCLUÍDA
 
@@ -92,17 +92,17 @@ intelecto-testes/
 - `Dockerfile` — Python 3.12 slim com uvicorn
 - `.env.example` — Variáveis de ambiente necessárias
 - `requirements.txt` — fastapi, uvicorn, httpx, pydantic-settings
-- `soul.md` — Personalidade padrão (PT-BR, informal, conciso)
+- `soul.md` — Personalidade padrêo (PT-BR, informal, conciso)
 - `src/config.py` — Configurações centralizadas via pydantic-settings
 - `src/main.py` — FastAPI com endpoints `/health` e `/webhook/whatsapp`
 - `src/agent/core.py` — Orquestrador: monta prompt (soul + histórico) → chama LLM → retorna resposta
 - `src/agent/soul.py` — Carrega soul.md com cache
 - `src/llm/base.py` — Interface abstrata `LLMProvider` com método `chat()`
-- `src/llm/openrouter.py` — Implementação OpenRouter via httpx async
+- `src/llm/openrouter.py` — Implementaçêo OpenRouter via httpx async
 - `src/channels/whatsapp.py` — Client Evolution API: `send_text()` e `extract_message()`
 - `.gitignore` — Ignora .env, __pycache__, data/memory.db
 
-**Detalhes de implementação:**
+**Detalhes de implementaçêo:**
 - Histórico em memória (dict por remote_jid, máximo 20 mensagens)
 - Ignora mensagens `fromMe` (do próprio bot)
 - Suporta texto direto e extendedTextMessage (com preview de link)
@@ -131,7 +131,7 @@ intelecto-testes/
 
 ---
 
-### Fase 3 — Automação (PENDENTE)
+### Fase 3 — Automaçêo (PENDENTE)
 
 **Objetivo:** IA executa tarefas agendadas e faz check-ins proativos.
 
@@ -157,12 +157,12 @@ intelecto-testes/
 
 ## 6. Variáveis de Ambiente
 
-| Variável | Descrição | Fase |
+| Variável | Descriçêo | Fase |
 |----------|-----------|------|
 | `OPENROUTER_API_KEY` | Chave da API OpenRouter | 1 |
 | `OPENROUTER_MODEL` | Modelo a usar (default: claude-sonnet) | 1 |
 | `EVOLUTION_API_URL` | URL interna da Evolution API | 1 |
-| `EVOLUTION_API_KEY` | Chave de autenticação da Evolution API | 1 |
+| `EVOLUTION_API_KEY` | Chave de autenticaçêo da Evolution API | 1 |
 | `EVOLUTION_INSTANCE_NAME` | Nome da instância WhatsApp | 1 |
 | `LOG_LEVEL` | Nível de log (info, debug, etc) | 1 |
 | `CHROMADB_URL` | URL do ChromaDB | 4 |
@@ -170,7 +170,7 @@ intelecto-testes/
 
 ---
 
-## 7. Verificação por Fase
+## 7. Verificaçêo por Fase
 
 | Fase | Teste |
 |------|-------|

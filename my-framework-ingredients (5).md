@@ -16,7 +16,7 @@
 
 ### 1. Soul.md Personality File
 
-**What it does**: Defina a personalidade, os valores e o estilo de comunicação da sua IA em um arquivo de texto simples. Como escrever uma ficha de personagem.
+**What it does**: Defina a personalidade, os valores e o estilo de comunicaçêo da sua IA em um arquivo de texto simples. Como escrever uma ficha de personagem.
 
 **Reference implementations**: OpenClaw, NanoBot, ZeroClaw, PicoClaw
 
@@ -28,7 +28,7 @@
 
 ---
 
-## Canais de Comunicação
+## Canais de Comunicaçêo
 
 ### 1. WhatsApp Integration
 
@@ -73,7 +73,7 @@
 
 ### 3. Document Knowledge Base
 
-**What it does**: Faça upload de PDFs, planilhas, documentos. A IA pode pesquisar e analisá-los. O conhecimento da sua empresa ao alcance da mão.
+**What it does**: Faça upload de PDFs, planilhas, documentos. A IA pode pesquisar e analisá-los. O conhecimento da sua empresa ao alcance da mêo.
 
 **Reference implementations**: Agent Zero, OpenClaw
 
@@ -95,7 +95,7 @@
 
 ---
 
-## Automação e Agendamento
+## Automaçêo e Agendamento
 
 ### 1. Cron Scheduling
 
@@ -116,7 +116,7 @@
 
 ### 2. Heartbeat System
 
-**What it does**: A IA acorda a cada 30 minutos para verificar se algo precisa de atenção. Proativa, não apenas reativa.
+**What it does**: A IA acorda a cada 30 minutos para verificar se algo precisa de atençêo. Proativa, nêo apenas reativa.
 
 **Reference implementations**: OpenClaw, PicoClaw, NanoBot, IronClaw, ZeroClaw
 

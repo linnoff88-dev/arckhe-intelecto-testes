@@ -1,4 +1,4 @@
-# Diário de Implementação — Fase 1 (Core MVP)
+# Diário de Implementaçêo — Fase 1 (Core MVP)
 
 **Data:** 2026-03-25
 **Objetivo:** IA respondendo pelo WhatsApp usando OpenRouter
@@ -17,7 +17,7 @@ Criados todos os arquivos base do projeto:
 - `src/llm/openrouter.py` — Provider OpenRouter via httpx async
 - `src/channels/whatsapp.py` — Client Evolution API
 - `src/config.py` — Settings via pydantic-settings
-- `soul.md` — Personalidade padrão em PT-BR
+- `soul.md` — Personalidade padrêo em PT-BR
 - `.env.example` — Template de variáveis de ambiente
 
 O container `intelecto` (FastAPI) buildou e subiu sem problemas na primeira tentativa.
@@ -33,7 +33,7 @@ Bind for 0.0.0.0:8080 failed: port is already allocated
 
 **Causa:** Outro serviço na máquina já usava a porta 8080.
 
-**Solução:** Mapeei a porta externa para `8085`:
+**Soluçêo:** Mapeei a porta externa para `8085`:
 ```yaml
 ports:
   - "8085:8080"  # era "8080:8080"
@@ -51,7 +51,7 @@ O container reiniciava em loop.
 
 **Causa:** A v2.x da Evolution API exige um banco de dados configurado (PostgreSQL).
 
-**Solução:** Adicionei um container PostgreSQL e as variáveis:
+**Soluçêo:** Adicionei um container PostgreSQL e as variáveis:
 ```yaml
 evolution-db:
   image: postgres:16-alpine
@@ -70,20 +70,20 @@ evolution-api:
 
 ## 4. Problema: Evolution API v2.2.3 — QR Code nunca é gerado
 
-**Erro:** O endpoint `GET /instance/connect/{instance}` sempre retornava `{"count": 0}` sem gerar QR code nem pairing code. Testado com múltiplas tentativas, delays de até 15 segundos, recriação de instância.
+**Erro:** O endpoint `GET /instance/connect/{instance}` sempre retornava `{"count": 0}` sem gerar QR code nem pairing code. Testado com múltiplas tentativas, delays de até 15 segundos, recriaçêo de instância.
 
-**Investigação:**
+**Investigaçêo:**
 - A API respondia normalmente a outros endpoints (create, fetchInstances, connectionState)
 - O container alcançava o WhatsApp (`https://web.whatsapp.com` retornava 200)
 - Logs mostravam **"redis disconnected"** em loop — a v2.2.3 precisa de Redis para o Baileys funcionar
-- Mesmo adicionando Redis ao docker-compose, o QR continuou não sendo gerado
+- Mesmo adicionando Redis ao docker-compose, o QR continuou nêo sendo gerado
 - O problema persistiu nas versões v2.2.3 e v2.1.1
 
-**Conclusão:** A v2.x tem dependências complexas (PostgreSQL + Redis) e o Baileys não conseguia iniciar o handshake WebSocket com o WhatsApp, provavelmente por configuração faltante não documentada.
+**Conclusêo:** A v2.x tem dependências complexas (PostgreSQL + Redis) e o Baileys nêo conseguia iniciar o handshake WebSocket com o WhatsApp, provavelmente por configuraçêo faltante nêo documentada.
 
-**Solução:** Voltei para a **v1.8.0** que:
-- Não precisa de PostgreSQL (usa arquivos locais)
-- Não precisa de Redis
+**Soluçêo:** Voltei para a **v1.8.0** que:
+- Nêo precisa de PostgreSQL (usa arquivos locais)
+- Nêo precisa de Redis
 - Gera QR code imediatamente no `POST /instance/create` com `qrcode: true`
 
 ```yaml
@@ -106,7 +106,7 @@ httpx.HTTPStatusError: Client error '400 Bad Request' for url '.../message/sendT
 - v2.x usa: `{"number": "...", "text": "..."}`
 - v1.8.0 usa: `{"number": "...", "textMessage": {"text": "..."}}`
 
-**Solução:** Atualizei `whatsapp.py`:
+**Soluçêo:** Atualizei `whatsapp.py`:
 ```python
 # Antes (v2.x)
 payload = {"number": remote_jid, "text": text}
@@ -124,15 +124,15 @@ payload = {"number": remote_jid, "textMessage": {"text": text}}
 {"status":400,"error":"Bad Request","response":{"message":[{"exists":false,"jid":"46231128641703@lid"}]}}
 ```
 
-**Causa:** O WhatsApp mudou o formato de identificação de usuários. Antes usava o número de telefone (`555194036619@s.whatsapp.net`), agora usa um ID interno chamado **LID** (`46231128641703@lid`). O webhook da Evolution API v1.8.0 envia o `remoteJid` no formato LID, mas o endpoint `sendText` **não aceita LID** — precisa do número real.
+**Causa:** O WhatsApp mudou o formato de identificaçêo de usuários. Antes usava o número de telefone (`555194036619@s.whatsapp.net`), agora usa um ID interno chamado **LID** (`46231128641703@lid`). O webhook da Evolution API v1.8.0 envia o `remoteJid` no formato LID, mas o endpoint `sendText` **nêo aceita LID** — precisa do número real.
 
-**Investigação:**
+**Investigaçêo:**
 - O campo `participant` no webhook vem `null` para chats 1:1
-- O campo `sender` no body raiz é o número do **bot**, não do remetente
-- Não há campo no webhook que contenha o número real do remetente
+- O campo `sender` no body raiz é o número do **bot**, nêo do remetente
+- Nêo há campo no webhook que contenha o número real do remetente
 - A API de contatos (`chat/findContacts`) retorna todos os contatos com número real + pushName
 
-**Solução implementada — mapeamento LID → número:**
+**Soluçêo implementada — mapeamento LID → número:**
 
 1. Adicionei um cache em memória `_lid_to_number: dict[str, str]` em `whatsapp.py`
 2. Criado endpoint `POST /map-lid` para registrar mapeamentos manualmente
@@ -146,19 +146,19 @@ curl -X POST http://localhost:8000/map-lid \
   -d '{"lid":"46231128641703@lid","number":"555194036619@s.whatsapp.net"}'
 ```
 
-**Limitação:** O mapeamento é em memória — se o container reiniciar, precisa registrar novamente. Será resolvido na Fase 2 quando a memória for persistida em SQLite.
+**Limitaçêo:** O mapeamento é em memória — se o container reiniciar, precisa registrar novamente. Será resolvido na Fase 2 quando a memória for persistida em SQLite.
 
-**Solução futura (Fase 2):** Automatizar o mapeamento no startup buscando todos os contatos e correlacionando com mensagens recentes via pushName.
+**Soluçêo futura (Fase 2):** Automatizar o mapeamento no startup buscando todos os contatos e correlacionando com mensagens recentes via pushName.
 
 ---
 
-## 7. Problema: Webhook não configurado na instância
+## 7. Problema: Webhook nêo configurado na instância
 
-**Erro:** Mensagens chegavam ao WhatsApp mas não ao FastAPI.
+**Erro:** Mensagens chegavam ao WhatsApp mas nêo ao FastAPI.
 
 **Causa:** A variável `WEBHOOK_GLOBAL_URL` no docker-compose nem sempre é respeitada pela v1.8.0. O webhook precisa ser configurado explicitamente na instância.
 
-**Solução:** Configurar webhook via API após criar a instância:
+**Soluçêo:** Configurar webhook via API após criar a instância:
 ```bash
 curl -X POST http://localhost:8085/webhook/set/intelecto \
   -H "apikey: meutesteintelecto" \
@@ -177,9 +177,9 @@ curl -X POST http://localhost:8085/webhook/set/intelecto \
 
 **Erro:** Webhook recebia eventos mas ignorava todos.
 
-**Causa:** O código original filtrava por `event == "messages.upsert"` (exato), mas dependendo da versão o evento pode variar.
+**Causa:** O código original filtrava por `event == "messages.upsert"` (exato), mas dependendo da versêo o evento pode variar.
 
-**Solução:** Mudei para verificação mais flexível:
+**Soluçêo:** Mudei para verificaçêo mais flexível:
 ```python
 # Antes
 if event != "messages.upsert":
@@ -192,21 +192,21 @@ if "messages" not in event:
 
 ## 9. Problema: QR Code expira rápido
 
-**Observação:** O QR code gerado pela Evolution API expira em ~45 segundos. Se o usuário não escanear a tempo, precisa gerar outro via `GET /instance/connect/{instance}`.
+**Observaçêo:** O QR code gerado pela Evolution API expira em ~45 segundos. Se o usuário nêo escanear a tempo, precisa gerar outro via `GET /instance/connect/{instance}`.
 
-**Aprendizado:** Sempre verificar `GET /instance/connectionState/{instance}` antes de tentar gerar novo QR. Se já estiver `open`, não precisa reconectar.
-
----
-
-## 10. Problema: Sessão WhatsApp persistida nos volumes
-
-**Observação (positiva):** Ao reiniciar os containers, a conexão WhatsApp é mantida se os volumes Docker forem preservados (`evolution_instances`, `evolution_store`). Não precisa escanear QR novamente.
-
-**Cuidado:** Ao fazer `docker compose down -v` (com `-v`), os volumes são deletados e a sessão é perdida — precisará reconectar via QR.
+**Aprendizado:** Sempre verificar `GET /instance/connectionState/{instance}` antes de tentar gerar novo QR. Se já estiver `open`, nêo precisa reconectar.
 
 ---
 
-## Configuração Final que Funciona
+## 10. Problema: Sessêo WhatsApp persistida nos volumes
+
+**Observaçêo (positiva):** Ao reiniciar os containers, a conexêo WhatsApp é mantida se os volumes Docker forem preservados (`evolution_instances`, `evolution_store`). Nêo precisa escanear QR novamente.
+
+**Cuidado:** Ao fazer `docker compose down -v` (com `-v`), os volumes sêo deletados e a sessêo é perdida — precisará reconectar via QR.
+
+---
+
+## Configuraçêo Final que Funciona
 
 ### docker-compose.yml
 ```yaml
@@ -266,11 +266,11 @@ WhatsApp (msg) → Evolution API v1.8.0 → webhook POST → FastAPI
 
 ## Lições Aprendidas
 
-1. **Evolution API v2.x é instável para QR code** — precisa de PostgreSQL + Redis e mesmo assim pode não funcionar. A v1.8.0 é muito mais simples e confiável.
+1. **Evolution API v2.x é instável para QR code** — precisa de PostgreSQL + Redis e mesmo assim pode nêo funcionar. A v1.8.0 é muito mais simples e confiável.
 
-2. **O WhatsApp migrou para formato LID** — o `remoteJid` não é mais o número de telefone. Qualquer integração precisa lidar com isso. A v1.8.0 não suporta envio para LID, então é necessário um mapeamento LID→número.
+2. **O WhatsApp migrou para formato LID** — o `remoteJid` nêo é mais o número de telefone. Qualquer integraçêo precisa lidar com isso. A v1.8.0 nêo suporta envio para LID, entêo é necessário um mapeamento LID→número.
 
-3. **Volumes Docker preservam a sessão WhatsApp** — não use `docker compose down -v` a menos que queira reconectar.
+3. **Volumes Docker preservam a sessêo WhatsApp** — nêo use `docker compose down -v` a menos que queira reconectar.
 
 4. **O webhook global do docker-compose nem sempre funciona** — configure explicitamente via API após criar a instância.
 

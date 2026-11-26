@@ -27,7 +27,7 @@ async def ensure_webhook() -> None:
             # Verifica se a instância existe
             resp = await client.get(f"{base}/instance/connectionState/{instance}", headers=headers)
             if resp.status_code == 404:
-                logger.warning("Instância '%s' não existe na Evolution API", instance)
+                logger.warning("Instância '%s' nêo existe na Evolution API", instance)
                 return
 
             # Verifica webhook atual
@@ -36,7 +36,7 @@ async def ensure_webhook() -> None:
 
             webhook_url = f"http://intelecto:8000/webhook/whatsapp"
 
-            # Configura se não estiver ativo ou URL diferente
+            # Configura se nêo estiver ativo ou URL diferente
             if not current or not current.get("enabled") or current.get("url") != webhook_url:
                 resp = await client.post(f"{base}/webhook/set/{instance}", headers=headers, json={
                     "enabled": True,
@@ -51,7 +51,7 @@ async def ensure_webhook() -> None:
             else:
                 logger.info("Webhook já configurado corretamente")
     except Exception as e:
-        logger.warning("Não foi possível configurar webhook: %s", e)
+        logger.warning("Nêo foi possível configurar webhook: %s", e)
 
 
 @asynccontextmanager

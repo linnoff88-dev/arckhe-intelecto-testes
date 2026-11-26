@@ -1,27 +1,27 @@
-﻿# Intelecto
+ï»¿# Intelecto
 
 Agente de IA conectado ao WhatsApp via Evolution API, com LLM via OpenRouter.
 
 ```
-WhatsApp â†’ Evolution API â†’ FastAPI (webhook) â†’ OpenRouter (LLM) â†’ resposta â†’ Evolution API â†’ WhatsApp
+WhatsApp ê¢â â Evolution API ê¢â â FastAPI (webhook) ê¢â â OpenRouter (LLM) ê¢â â resposta ê¢â â Evolution API ê¢â â WhatsApp
 ```
 
-## PrÃ©-requisitos
+## PrêÂ©-requisitos
 
 - Docker e Docker Compose instalados
 - Chave de API do [OpenRouter](https://openrouter.ai/)
-- Um nÃºmero de WhatsApp para conectar ao bot
+- Um nêÂºmero de WhatsApp para conectar ao bot
 
-## InstalaÃ§Ã£o
+## InstalaêÂ§êÂ£o
 
-### 1. Clonar o repositÃ³rio
+### 1. Clonar o repositêÂ³rio
 
 ```bash
 git clone <url-do-repositorio>
 cd intelecto-testes
 ```
 
-### 2. Configurar variÃ¡veis de ambiente
+### 2. Configurar variêÂ¡veis de ambiente
 
 Copie o arquivo de exemplo e preencha com suas credenciais:
 
@@ -31,14 +31,14 @@ cp .env.example .env
 
 Edite o `.env`:
 
-| VariÃ¡vel | DescriÃ§Ã£o | Exemplo |
+| VariêÂ¡vel | DescriêÂ§êÂ£o | Exemplo |
 |----------|-----------|---------|
 | `OPENROUTER_API_KEY` | Chave da API do OpenRouter | `sk-or-v1-xxxx` |
 | `OPENROUTER_MODEL` | Modelo LLM a utilizar | `anthropic/claude-sonnet-4-20250514` |
 | `EVOLUTION_API_URL` | URL interna da Evolution API | `http://evolution-api:8080` |
-| `EVOLUTION_API_KEY` | Chave de autenticaÃ§Ã£o da Evolution API | `minha-chave-secreta` |
-| `EVOLUTION_INSTANCE_NAME` | Nome da instÃ¢ncia do WhatsApp | `intelecto` |
-| `LOG_LEVEL` | NÃ­vel de log | `info` |
+| `EVOLUTION_API_KEY` | Chave de autenticaêÂ§êÂ£o da Evolution API | `minha-chave-secreta` |
+| `EVOLUTION_INSTANCE_NAME` | Nome da instêÂ¢ncia do WhatsApp | `intelecto` |
+| `LOG_LEVEL` | NêÂ­vel de log | `info` |
 
 ### 3. Personalidade do agente
 
@@ -52,7 +52,7 @@ docker compose up --build
 
 Isso inicia dois containers:
 
-| Container | Porta | DescriÃ§Ã£o |
+| Container | Porta | DescriêÂ§êÂ£o |
 |-----------|-------|-----------|
 | **intelecto** | 8000 | App FastAPI (webhook + API) |
 | **evolution-api** | 8085 | Gateway WhatsApp (Evolution API v1.8.0) |
@@ -63,7 +63,7 @@ Para rodar em background:
 docker compose up --build -d
 ```
 
-Para reconstruir apenas o app apÃ³s mudanÃ§as no cÃ³digo:
+Para reconstruir apenas o app apêÂ³s mudanêÂ§as no cêÂ³digo:
 
 ```bash
 docker compose up --build intelecto -d
@@ -71,7 +71,7 @@ docker compose up --build intelecto -d
 
 ## Conectando o WhatsApp
 
-### 1. Criar a instÃ¢ncia na Evolution API
+### 1. Criar a instêÂ¢ncia na Evolution API
 
 Acesse o painel da Evolution API em `http://localhost:8085` ou crie via API:
 
@@ -85,16 +85,16 @@ curl -X POST http://localhost:8085/instance/create \
   }'
 ```
 
-A resposta inclui um QR Code em base64. VocÃª tambÃ©m pode acessar o QR Code pelo painel web.
+A resposta inclui um QR Code em base64. VocêÂª tambêÂ©m pode acessar o QR Code pelo painel web.
 
 ### 2. Escanear o QR Code
 
 Abra o WhatsApp no celular:
-1. VÃ¡ em **ConfiguraÃ§Ãµes > Aparelhos conectados**
+1. VêÂ¡ em **ConfiguraêÂ§êÂµes > Aparelhos conectados**
 2. Toque em **Conectar um aparelho**
 3. Escaneie o QR Code gerado
 
-### 3. Verificar conexÃ£o
+### 3. Verificar conexêÂ£o
 
 ```bash
 curl -H "apikey: SUA_EVOLUTION_API_KEY" \
@@ -103,9 +103,9 @@ curl -H "apikey: SUA_EVOLUTION_API_KEY" \
 
 O status deve ser `"open"` quando conectado.
 
-### 4. Webhook (automÃ¡tico)
+### 4. Webhook (automêÂ¡tico)
 
-O Intelecto configura o webhook automaticamente ao iniciar. Ele verifica se a instÃ¢ncia existe e se o webhook estÃ¡ apontando para `http://intelecto:8000/webhook/whatsapp`. Se nÃ£o estiver, configura sozinho.
+O Intelecto configura o webhook automaticamente ao iniciar. Ele verifica se a instêÂ¢ncia existe e se o webhook estêÂ¡ apontando para `http://intelecto:8000/webhook/whatsapp`. Se nêÂ£o estiver, configura sozinho.
 
 Caso precise configurar manualmente:
 
@@ -121,7 +121,7 @@ curl -X POST http://localhost:8085/webhook/set/intelecto \
   }'
 ```
 
-## Verificando se estÃ¡ tudo funcionando
+## Verificando se estêÂ¡ tudo funcionando
 
 ### Status dos containers
 
@@ -135,9 +135,9 @@ docker compose ps
 docker compose logs -f intelecto
 ```
 
-### Teste rÃ¡pido
+### Teste rêÂ¡pido
 
-Envie uma mensagem para o nÃºmero do WhatsApp conectado. Nos logs do Intelecto vocÃª deve ver:
+Envie uma mensagem para o nêÂºmero do WhatsApp conectado. Nos logs do Intelecto vocêÂª deve ver:
 
 ```
 INFO src.main: Mensagem de <remetente>: <texto>
@@ -152,52 +152,52 @@ pip install -r requirements.txt
 uvicorn src.main:app --reload --port 8000
 ```
 
-Neste caso, ajuste `EVOLUTION_API_URL` no `.env` para apontar para a URL acessÃ­vel da Evolution API (ex: `http://localhost:8085`).
+Neste caso, ajuste `EVOLUTION_API_URL` no `.env` para apontar para a URL acessêÂ­vel da Evolution API (ex: `http://localhost:8085`).
 
 ## Estrutura do projeto
 
 ```
-â”œâ”€â”€ docker-compose.yml    # OrquestraÃ§Ã£o dos containers
-â”œâ”€â”€ Dockerfile            # Build do app Python
-â”œâ”€â”€ .env                  # VariÃ¡veis de ambiente (nÃ£o commitado)
-â”œâ”€â”€ .env.example          # Template das variÃ¡veis
-â”œâ”€â”€ soul.md               # Personalidade do agente
-â”œâ”€â”€ requirements.txt      # DependÃªncias Python
-â”œâ”€â”€ data/                 # Dados persistentes (lid_map.json, etc)
-â””â”€â”€ src/
-    â”œâ”€â”€ main.py           # FastAPI app, webhook, lifespan
-    â”œâ”€â”€ config.py         # ConfiguraÃ§Ãµes (pydantic-settings)
-    â”œâ”€â”€ agent/
-    â”‚   â”œâ”€â”€ core.py       # Orquestrador do agente
-    â”‚   â””â”€â”€ soul.py       # Carrega soul.md
-    â”œâ”€â”€ channels/
-    â”‚   â””â”€â”€ whatsapp.py   # Cliente Evolution API (envio/recebimento)
-    â””â”€â”€ llm/
-        â”œâ”€â”€ base.py       # Interface abstrata do LLM
-        â””â”€â”€ openrouter.py # ImplementaÃ§Ã£o OpenRouter
+ê¢âÅê¢ââ¬ê¢ââ¬ docker-compose.yml    # OrquestraêÂ§êÂ£o dos containers
+ê¢âÅê¢ââ¬ê¢ââ¬ Dockerfile            # Build do app Python
+ê¢âÅê¢ââ¬ê¢ââ¬ .env                  # VariêÂ¡veis de ambiente (nêÂ£o commitado)
+ê¢âÅê¢ââ¬ê¢ââ¬ .env.example          # Template das variêÂ¡veis
+ê¢âÅê¢ââ¬ê¢ââ¬ soul.md               # Personalidade do agente
+ê¢âÅê¢ââ¬ê¢ââ¬ requirements.txt      # DependêÂªncias Python
+ê¢âÅê¢ââ¬ê¢ââ¬ data/                 # Dados persistentes (lid_map.json, etc)
+ê¢ââê¢ââ¬ê¢ââ¬ src/
+    ê¢âÅê¢ââ¬ê¢ââ¬ main.py           # FastAPI app, webhook, lifespan
+    ê¢âÅê¢ââ¬ê¢ââ¬ config.py         # ConfiguraêÂ§êÂµes (pydantic-settings)
+    ê¢âÅê¢ââ¬ê¢ââ¬ agent/
+    ê¢ââ   ê¢âÅê¢ââ¬ê¢ââ¬ core.py       # Orquestrador do agente
+    ê¢ââ   ê¢ââê¢ââ¬ê¢ââ¬ soul.py       # Carrega soul.md
+    ê¢âÅê¢ââ¬ê¢ââ¬ channels/
+    ê¢ââ   ê¢ââê¢ââ¬ê¢ââ¬ whatsapp.py   # Cliente Evolution API (envio/recebimento)
+    ê¢ââê¢ââ¬ê¢ââ¬ llm/
+        ê¢âÅê¢ââ¬ê¢ââ¬ base.py       # Interface abstrata do LLM
+        ê¢ââê¢ââ¬ê¢ââ¬ openrouter.py # ImplementaêÂ§êÂ£o OpenRouter
 ```
 
 ## Troubleshooting
 
-### Mensagens nÃ£o chegam no bot
-- Verifique se a instÃ¢ncia estÃ¡ conectada (`connectionState` = `open`)
+### Mensagens nêÂ£o chegam no bot
+- Verifique se a instêÂ¢ncia estêÂ¡ conectada (`connectionState` = `open`)
 - Verifique os logs: `docker compose logs -f intelecto`
-- O webhook Ã© configurado automaticamente, mas confirme com:
+- O webhook êÂ© configurado automaticamente, mas confirme com:
   ```bash
   curl -H "apikey: SUA_EVOLUTION_API_KEY" http://localhost:8085/webhook/find/intelecto
   ```
 
-### Bot recebe mas nÃ£o responde
+### Bot recebe mas nêÂ£o responde
 - Verifique os logs por erros na chamada ao OpenRouter
-- Confirme que `OPENROUTER_API_KEY` estÃ¡ vÃ¡lida no `.env`
+- Confirme que `OPENROUTER_API_KEY` estêÂ¡ vêÂ¡lida no `.env`
 - Verifique se o mapeamento LID existe em `data/lid_map.json`
 
-### InstÃ¢ncia perdida apÃ³s restart
-- A Evolution API persiste instÃ¢ncias nos volumes Docker (`evolution_instances`, `evolution_store`)
-- Se os volumes forem removidos, Ã© necessÃ¡rio recriar a instÃ¢ncia e escanear o QR Code novamente
-- O webhook serÃ¡ reconfigurado automaticamente pelo Intelecto
+### InstêÂ¢ncia perdida apêÂ³s restart
+- A Evolution API persiste instêÂ¢ncias nos volumes Docker (`evolution_instances`, `evolution_store`)
+- Se os volumes forem removidos, êÂ© necessêÂ¡rio recriar a instêÂ¢ncia e escanear o QR Code novamente
+- O webhook serêÂ¡ reconfigurado automaticamente pelo Intelecto
 
-## Guia RÃ¡pido
+## Guia RêÂ¡pido
 
 ```bash
 # 1. Clonar e configurar
@@ -211,18 +211,18 @@ docker compose up --build -d
 
 # 3. Acessar o painel da Evolution API
 # Abra http://localhost:8085 no navegador
-# Crie a instÃ¢ncia com o nome "intelecto"
-# Escaneie o QR Code no WhatsApp (ConfiguraÃ§Ãµes > Aparelhos conectados)
+# Crie a instêÂ¢ncia com o nome "intelecto"
+# Escaneie o QR Code no WhatsApp (ConfiguraêÂ§êÂµes > Aparelhos conectados)
 
 # 4. Pronto! Mande uma mensagem no WhatsApp e o bot responde.
 
-# Comandos Ãºteis:
+# Comandos êÂºteis:
 docker compose logs -f intelecto   # Ver logs
-docker compose restart intelecto   # Reiniciar apÃ³s trocar .env
+docker compose restart intelecto   # Reiniciar apêÂ³s trocar .env
 docker compose down                # Parar tudo
 ```
 
-## PrÃ©-requisitos por sistema operacional
+## PrêÂ©-requisitos por sistema operacional
 
 ### Linux (Ubuntu/Debian)
 
@@ -233,14 +233,14 @@ sudo apt update
 # Instalar Docker
 sudo apt install -y docker.io docker-compose-v2
 
-# Adicionar seu usuÃ¡rio ao grupo docker (evita usar sudo)
+# Adicionar seu usuêÂ¡rio ao grupo docker (evita usar sudo)
 sudo usermod -aG docker $USER
-# FaÃ§a logout e login novamente para aplicar
+# FaêÂ§a logout e login novamente para aplicar
 
 # Instalar Git
 sudo apt install -y git
 
-# Verificar instalaÃ§Ã£o
+# Verificar instalaêÂ§êÂ£o
 docker --version
 docker compose version
 git --version
@@ -248,37 +248,37 @@ git --version
 
 ### Windows
 
-1. **Docker Desktop** â€” Baixe e instale em [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/)
-   - Durante a instalaÃ§Ã£o, habilite o **WSL 2** quando solicitado
-   - ApÃ³s instalar, abra o Docker Desktop e aguarde ele iniciar
+1. **Docker Desktop** ê¢â¬â Baixe e instale em [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/)
+   - Durante a instalaêÂ§êÂ£o, habilite o **WSL 2** quando solicitado
+   - ApêÂ³s instalar, abra o Docker Desktop e aguarde ele iniciar
 
-2. **Git** â€” Baixe e instale em [git-scm.com](https://git-scm.com/)
-   - Na instalaÃ§Ã£o, mantenha as opÃ§Ãµes padrÃ£o
+2. **Git** ê¢â¬â Baixe e instale em [git-scm.com](https://git-scm.com/)
+   - Na instalaêÂ§êÂ£o, mantenha as opêÂ§êÂµes padrêÂ£o
 
-3. **Terminal** â€” Use o **Git Bash** (instalado junto com o Git) ou o **PowerShell**
+3. **Terminal** ê¢â¬â Use o **Git Bash** (instalado junto com o Git) ou o **PowerShell**
 
-4. **Verificar instalaÃ§Ã£o** â€” Abra o terminal e rode:
+4. **Verificar instalaêÂ§êÂ£o** ê¢â¬â Abra o terminal e rode:
    ```bash
    docker --version
    docker compose version
    git --version
    ```
 
-ApÃ³s instalar os prÃ©-requisitos, siga o [Guia RÃ¡pido](#guia-rÃ¡pido) acima.
+ApêÂ³s instalar os prêÂ©-requisitos, siga o [Guia RêÂ¡pido](#guia-rêÂ¡pido) acima.
 
-## Usando Ollama (LLM local) â€” Futuro
+## Usando Ollama (LLM local) ê¢â¬â Futuro
 
-O Intelecto estÃ¡ preparado para suportar o [Ollama](https://ollama.com/) como provedor de LLM local, rodando modelos diretamente na sua mÃ¡quina sem depender de APIs externas.
+O Intelecto estêÂ¡ preparado para suportar o [Ollama](https://ollama.com/) como provedor de LLM local, rodando modelos diretamente na sua mêÂ¡quina sem depender de APIs externas.
 
 ### Requisitos de hardware
 
-| Modelo | RAM mÃ­nima | GPU (opcional) | ObservaÃ§Ã£o |
+| Modelo | RAM mêÂ­nima | GPU (opcional) | ObservaêÂ§êÂ£o |
 |--------|-----------|----------------|------------|
 | 7B (ex: llama3.1:8b) | 8 GB | 4 GB VRAM | Bom para testes |
-| 13B | 16 GB | 8 GB VRAM | EquilÃ­brio qualidade/velocidade |
+| 13B | 16 GB | 8 GB VRAM | EquilêÂ­brio qualidade/velocidade |
 | 70B | 64 GB | 24+ GB VRAM | Melhor qualidade, exige hardware potente |
 
-Com GPU NVIDIA a inferÃªncia Ã© significativamente mais rÃ¡pida. Sem GPU, roda na CPU (mais lento).
+Com GPU NVIDIA a inferêÂªncia êÂ© significativamente mais rêÂ¡pida. Sem GPU, roda na CPU (mais lento).
 
 ### Como vai funcionar
 
@@ -321,17 +321,17 @@ OLLAMA_MODEL=llama3.1:8b
 docker compose up --build -d
 ```
 
-### DiferenÃ§as entre OpenRouter e Ollama
+### DiferenêÂ§as entre OpenRouter e Ollama
 
 | | OpenRouter | Ollama |
 |---|-----------|--------|
-| **Onde roda** | Nuvem (API externa) | Local (sua mÃ¡quina) |
+| **Onde roda** | Nuvem (API externa) | Local (sua mêÂ¡quina) |
 | **Custo** | Gratuito (limitado) ou pago | Gratuito (sem limites) |
 | **Privacidade** | Dados passam por terceiros | Tudo local |
 | **Velocidade** | Depende da internet | Depende do hardware |
-| **Modelos** | Centenas disponÃ­veis | Precisa baixar cada um |
-| **Setup** | SÃ³ precisa de API key | Precisa de hardware adequado |
+| **Modelos** | Centenas disponêÂ­veis | Precisa baixar cada um |
+| **Setup** | SêÂ³ precisa de API key | Precisa de hardware adequado |
 
 ---
 
-Projeto adaptado da comunidade INEMA TDS - Marca Arckhe
+Projeto  - ARCKHÉe

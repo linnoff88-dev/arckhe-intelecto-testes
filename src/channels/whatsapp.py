@@ -51,7 +51,7 @@ async def send_text(remote_jid: str, text: str) -> None:
             number = mapped
             logger.info("LID %s mapeado para %s", remote_jid, mapped)
         else:
-            logger.error("Número não mapeado para LID %s - não é possível enviar", remote_jid)
+            logger.error("Número nêo mapeado para LID %s - nêo é possível enviar", remote_jid)
             return
 
     payload = {
@@ -72,7 +72,7 @@ async def send_text(remote_jid: str, text: str) -> None:
 def extract_message(body: dict) -> tuple[str | None, str | None]:
     """Extrai remetente e texto de um webhook da Evolution API v1.8.0.
 
-    Retorna (remote_jid, text) ou (None, None) se não for mensagem de texto.
+    Retorna (remote_jid, text) ou (None, None) se nêo for mensagem de texto.
     Também mapeia LID -> número real quando possível.
     """
     data = body.get("data", body)
